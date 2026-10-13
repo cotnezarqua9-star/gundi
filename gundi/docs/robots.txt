@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# ⚠️ ჩაანაცვლე cotnezarqua9-star
+Sitemap: https://cotnezarqua9-star.github.io/gundi/sitemap.xml

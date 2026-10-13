@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0f2e">
+
+  <!-- ============ SEO ============ -->
+  <title>Gundi - Live Football Auction Game</title>
+  <meta name="description" content="Play online football auction with friends. Create a room with a 4-digit code, bid live on football players and build the best 5-player team. Free, 2-4 players, works on mobile.">
+  <meta name="keywords" content="football auction game, online football game, multiplayer game, ფეხბურთის აუქციონი, Gundi, გუნდი">
+  <meta name="robots" content="index, follow">
+  <!-- ⚠️ ჩაანაცვლე cotnezarqua9-star შენი GitHub მომხმარებლით (და REPO, თუ რეპოს სახელი სხვაა) -->
+  <link rel="canonical" href="https://cotnezarqua9-star.github.io/gundi/">
+
+  <!-- Google Search Console-ის დასადასტურებლად (მეთოდი: HTML tag). კოდს მოგცემს Search Console -->
+  <!-- <meta name="google-site-verification" content="ᲨᲔᲜᲘ_ᲙᲝᲓᲘ"> -->
+
+  <!-- Open Graph (Facebook, Messenger, WhatsApp, Telegram...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Gundi">
+  <meta property="og:title" content="Gundi - Live Football Auction Game">
+  <meta property="og:description" content="Play online football auction with friends. Bid live, build your dream 5-player team and beat your friends!">
+  <meta property="og:url" content="https://cotnezarqua9-star.github.io/gundi/">
+  <meta property="og:image" content="https://cotnezarqua9-star.github.io/gundi/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Gundi - Live Football Auction Game">
+  <meta property="og:locale" content="ka_GE">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gundi - Live Football Auction Game">
+  <meta name="twitter:description" content="Play online football auction with friends. Bid live, build your dream 5-player team!">
+  <meta name="twitter:image" content="https://cotnezarqua9-star.github.io/gundi/og-image.png">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Gundi",
+    "alternateName": "Gundi - Live Football Auction Game",
+    "url": "https://cotnezarqua9-star.github.io/gundi/",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any (Web browser)",
+    "description": "Online multiplayer football auction game for 2-4 players. Bid live on football players and build the best team.",
+    "inLanguage": "ka",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Noto+Sans+Georgian:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ფონი: პროჟექტორები + მოედნის ხაზები -->
+  <div class="backdrop" aria-hidden="true">
+    <svg class="pitch-lines" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice">
+      <g fill="none" stroke="currentColor" stroke-width="3">
+        <rect x="40" y="40" width="920" height="620" rx="6"/>
+        <line x1="500" y1="40" x2="500" y2="660"/>
+        <circle cx="500" cy="350" r="95"/>
+        <rect x="40" y="200" width="150" height="300"/>
+        <rect x="810" y="200" width="150" height="300"/>
+      </g>
+    </svg>
+  </div>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div id="react-layer" class="react-layer" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="logo" href="./" aria-label="Gundi">
+      <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="#F3F5FF"/>
+        <path d="M20 10.5l7.6 5.5-2.9 8.9h-9.4L12.4 16z" fill="#0A0F2E"/>
+        <path d="M20 10.5V3.5M27.6 16l7-2.6M24.7 24.9l4.4 6M15.3 24.9l-4.4 6M12.4 16l-7-2.6" stroke="#0A0F2E" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#FF7A1A" stroke-width="2.5"/>
+      </svg>
+      <span>Gundi</span>
+    </a>
+    <div class="top-right">
+      <div class="top-chips" id="top-chips" hidden>
+        <span class="chip" title="ოთახის კოდი"><i class="ico">#</i><b id="g-code">----</b></span>
+        <span class="chip paddle" title="შენი ბიუჯეტი"><i class="ico">$</i><b id="g-budget">0</b></span>
+      </div>
+      <button id="btn-sound" class="icon-btn" type="button" aria-label="ხმის ჩართვა/გამორთვა" aria-pressed="true" data-ns>
+        <svg class="snd-on" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 010 7M18 6a8.5 8.5 0 010 12"/></svg>
+        <svg class="snd-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="conn" class="conn" hidden>⚠️ სერვერთან კავშირი არ არის. გაუშვი ტერმინალში <b>npm start</b> და გახსენი <b>http://localhost:3000</b></div>
+
+  <main>
+    <!-- ================= მთავარი ================= -->
+    <section id="screen-home" class="screen">
+      <div class="home">
+        <div class="home-hero">
+          <h1>Gundi</h1>
+          <p class="tagline">ფეხბურთელების ლაივ აუქციონი მეგობრებთან ერთად. 15 წამი თითო ბარათზე, 5 რაუნდი, ერთი გუნდი.</p>
+          <div class="fan" id="fan" aria-hidden="true"></div>
+        </div>
+
+        <div class="home-side">
+          <div class="panel join-panel">
+            <label class="field">
+              <span>შენი სახელი</span>
+              <input id="in-name" type="text" maxlength="16" autocomplete="nickname" placeholder="მაგ: გიორგი">
+            </label>
+            <button id="btn-create" class="btn primary big">ახალი თამაშის შექმნა</button>
+            <div class="or"><span>ან შედი მეგობრის ოთახში</span></div>
+            <label class="field">
+              <span>ოთახის კოდი</span>
+              <input id="in-code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="••••" class="code-input" autocomplete="off">
+            </label>
+            <button id="btn-join" class="btn big">თამაშში დაჯოინება</button>
+            <p id="home-msg" class="home-msg" role="alert" hidden></p>
+          </div>
+
+          <section class="panel howto" aria-labelledby="howto-title">
+            <h2 id="howto-title">როგორ თამაშობენ</h2>
+            <ol>
+              <li><b>ოთახი.</b> შექმენი და გაუგზავნე 4-ციფრიანი კოდი მეგობრებს (2-დან 4 მოთამაშემდე).</li>
+              <li><b>ბიუჯეტი.</b> ყველას აქვს $1,000,000 და 5 სლოტი: მეკარე, მცველი, ნახევარმცველი, თავდამსხმელი და ლეგენდა (ბოლო რაუნდში ყველა დროის უდიდესი ფეხბურთელები გამოდიან).</li>
+              <li><b>აუქციონი.</b> ყველა ფეხბურთელი $40,000-დან იწყება და ბარათს 15 წამი აქვს. ვინც მეტს დადებს, ფეხბურთელი მისია. ბოლო წამებში დადებული ფსონი დროს ამატებს.</li>
+              <li><b>ფინალი.</b> რაუნდში ერთ ფეხბურთელს ყიდულობ. იგებს გუნდი ყველაზე მაღალი ჯამური რეიტინგით.</li>
+            </ol>
+            <p class="muted">Gundi — უფასო ონლაინ ფეხბურთის აუქციონი (Football Auction Game) კომპიუტერისა და მობილურისთვის.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ლობი ================= -->
+    <section id="screen-lobby" class="screen" hidden>
+      <div class="lobby">
+        <div class="panel lobby-code">
+          <p class="muted">ოთახის კოდი</p>
+          <div class="bigcode" id="l-code" aria-label="ოთახის კოდი"></div>
+          <div class="row">
+            <button id="btn-copy-code" class="btn small">კოდის კოპირება</button>
+            <button id="btn-copy-link" class="btn small">ბმულის კოპირება</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>თემა</h2>
+          <div id="l-themes" class="themes" role="group" aria-label="თემა"></div>
+          <p id="l-theme-desc" class="muted"></p>
+        </div>
+
+        <div class="panel">
+          <h2>მოთამაშეები <span id="l-count" class="muted"></span></h2>
+          <ul id="l-players" class="plist"></ul>
+          <button id="btn-start" class="btn primary big">თამაშის დაწყება</button>
+          <p id="l-hint" class="muted center"></p>
+          <button id="btn-leave-lobby" class="btn ghost">გასვლა</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= აუქციონი ================= -->
+    <section id="screen-game" class="screen game" hidden>
+      <div class="roundbar">
+        <div id="g-round" class="roundname">რაუნდი 1/5</div>
+        <div class="round-meta"><span id="g-theme" class="theme-badge" hidden></span><span id="g-cardno" class="muted"></span></div>
+      </div>
+      <div class="steps" id="g-steps"></div>
+
+      <div class="layout">
+        <div class="col-main">
+          <div class="stage panel" id="stage">
+            <div class="stage-card" id="stage-card"></div>
+            <div class="stage-info" id="stage-info">
+              <div class="ring" id="ring">
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <circle class="ring-bg" cx="50" cy="50" r="44"/>
+                  <circle class="ring-fg" id="ring-fg" cx="50" cy="50" r="44"/>
+                </svg>
+                <span id="timer-num" role="timer" aria-live="off">—</span>
+              </div>
+              <div class="pricebox">
+                <span class="lbl" id="p-lbl">&nbsp;</span>
+                <strong id="p-val">—</strong>
+                <span class="leader" id="p-leader">&nbsp;</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="react-bar" data-react aria-label="რეაქციები"></div>
+
+          <div class="panel bidbox" id="bidbox">
+            <div class="quick">
+              <button id="btn-min" class="btn primary" data-ns>ფსონი</button>
+              <button id="btn-p10" class="btn" data-ns>+$10,000</button>
+              <button id="btn-p50" class="btn" data-ns>+$50,000</button>
+            </div>
+            <form id="bid-form" class="manual">
+              <input id="in-bid" type="text" inputmode="numeric" autocomplete="off" placeholder="ან ჩაწერე თანხა ხელით">
+              <button class="btn gold" type="submit" data-ns>ფსონი</button>
+            </form>
+            <p id="bid-hint" class="muted center"></p>
+          </div>
+
+          <div class="panel">
+            <h3>ფსონების ისტორია</h3>
+            <ul id="bid-history" class="hist"></ul>
+          </div>
+        </div>
+
+        <div class="col-side">
+          <div class="panel">
+            <h3>გუნდები</h3>
+            <div id="teams" class="teams"></div>
+          </div>
+          <div class="panel">
+            <h3>გაყიდვები</h3>
+            <ul id="sales" class="hist"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ფინალური მატჩი ================= -->
+    <section id="screen-match" class="screen" hidden>
+      <div class="match">
+        <p class="match-title">ფინალი: ორი საუკეთესო გუნდი</p>
+        <div class="m-head">
+          <div class="m-team" id="m-a"></div>
+          <div class="m-center">
+            <div class="m-clock" id="m-clock">0'</div>
+            <div class="m-board"><span id="m-sa">0</span><i>:</i><span id="m-sb">0</span></div>
+            <div class="m-phase" id="m-phase">ფინალი</div>
+          </div>
+          <div class="m-team right" id="m-b"></div>
+        </div>
+
+        <div class="pitch" id="pitch" aria-hidden="true">
+          <div class="p-goal l"></div><div class="p-goal r"></div>
+          <div class="p-circle"></div><div class="p-line"></div>
+          <span id="ball" class="ball">⚽</span>
+          <div id="goal-flash" class="goal-flash" hidden><b>გოლი!</b><span id="gf-name"></span></div>
+        </div>
+
+        <div class="m-bar"><i id="m-prog"></i><div id="m-marks"></div></div>
+
+        <div id="m-pens" class="m-pens" hidden>
+          <h3>პენალტების სერია</h3>
+          <div class="pk-row"><span id="pk-na" class="pk-name"></span><div id="pk-a" class="pk-dots"></div><b id="pk-sa">0</b></div>
+          <div class="pk-row"><span id="pk-nb" class="pk-name"></span><div id="pk-b" class="pk-dots"></div><b id="pk-sb">0</b></div>
+        </div>
+
+        <div class="m-lineups"><div id="m-la" class="slots"></div><div id="m-lb" class="slots"></div></div>
+        <ul id="m-feed" class="feed" aria-live="polite"></ul>
+        <div class="react-bar" data-react aria-label="რეაქციები"></div>
+        <button id="btn-skip" class="btn ghost" data-ns>გამოტოვება</button>
+      </div>
+    </section>
+
+    <!-- ================= შედეგები ================= -->
+    <section id="screen-end" class="screen" hidden>
+      <div class="end-hero">
+        <div class="crown" aria-hidden="true">🏆</div>
+        <h1 id="e-title">გამარჯვებული</h1>
+        <p class="tagline" id="e-winner"></p>
+        <p class="final-line" id="e-final"></p>
+      </div>
+      <div id="e-rank" class="rank"></div>
+      <div class="end-actions">
+        <button id="btn-again" class="btn primary big">ახალი თამაში</button>
+        <button id="btn-leave-end" class="btn ghost">მთავარ გვერდზე</button>
+      </div>
+      <p id="e-hint" class="muted center"></p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <noscript><p style="padding:16px;color:#fff">Gundi-ს სათამაშოდ საჭიროა JavaScript.</p></noscript>
+
+  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.8.1/dist/socket.io.min.js"></script>
+  <script src="config.js"></script>
+  <script src="sound.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
