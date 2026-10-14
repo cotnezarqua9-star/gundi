@@ -190,6 +190,7 @@
   /* ---------------- ხმები მდგომარეობის ცვლილებაზე ---------------- */
   function soundEvents(prev, st) {
     if (!window.GSound) return;
+      if (!st || !st.you || !st.you.id) return;
     const me = st.you.id;
     if (st.phase === 'auction' && (!prev || prev.phase !== 'auction')) GSound.ambience(true);
     if (st.phase !== 'auction' && prev && prev.phase === 'auction') GSound.ambience(false);
